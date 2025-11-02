@@ -150,7 +150,8 @@ const BookingPage = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-amber-800 hover:bg-amber-900 text-white py-6 text-lg"
+                className="w-full text-white py-6 text-lg"
+                style={{ backgroundColor: '#6A4C2E' }}
               >
                 Konfirmasi Reservasi
               </Button>
