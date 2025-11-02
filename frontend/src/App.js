@@ -9,6 +9,7 @@ import AboutPage from "./pages/AboutPage";
 import LoginPage from "./pages/LoginPage";
 import BookingPage from "./pages/BookingPage";
 import AdminDashboard from "./pages/AdminDashboard";
+import MenuDetailPage from "./pages/MenuDetailPage";
 import { Toaster } from "./components/ui/toaster";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
                   <Route path="/contact" element={<ContactPage />} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/booking" element={<BookingPage />} />
+                  <Route path="/menu/:category" element={<MenuDetailPage />} />
                 </Routes>
                 <Footer />
               </>
