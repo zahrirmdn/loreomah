@@ -43,7 +43,7 @@ const BookingPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-900 to-amber-700 text-white py-12">
+      <div className="text-white py-12" style={{ background: 'linear-gradient(135deg, #6A4C2E 0%, #8B6F47 100%)' }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Button
             onClick={() => navigate('/')}
