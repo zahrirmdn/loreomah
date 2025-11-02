@@ -31,7 +31,7 @@ const ContactPage = () => {
   return (
     <div>
       {/* Hero */}
-      <div className="bg-gradient-to-r from-amber-900 to-amber-700 text-white py-20">
+      <div className="text-white py-20" style={{ background: 'linear-gradient(135deg, #6A4C2E 0%, #8B6F47 100%)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold mb-4">Hubungi Kami</h1>
           <p className="text-xl">Kami siap melayani Anda dengan sepenuh hati</p>
