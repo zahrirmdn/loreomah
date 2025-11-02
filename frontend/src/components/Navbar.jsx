@@ -19,12 +19,11 @@ const Navbar = () => {
     <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-amber-800 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-xl">CL</span>
+          {/* Logo Only */}
+          <Link to="/" className="flex items-center">
+            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ backgroundColor: '#6A4C2E' }}>
+              <span className="text-white font-bold text-2xl">CL</span>
             </div>
-            <span className="text-2xl font-bold text-amber-900">Cafe Loreomah</span>
           </Link>
 
           {/* Desktop Menu */}
@@ -33,15 +32,18 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-lg font-medium transition-colors hover:text-amber-800 ${
-                  isActive(link.path) ? 'text-amber-800 border-b-2 border-amber-800' : 'text-gray-700'
+                className={`text-lg font-medium transition-colors ${
+                  isActive(link.path) ? 'border-b-2' : 'text-gray-700'
                 }`}
+                style={isActive(link.path) ? { color: '#6A4C2E', borderColor: '#6A4C2E' } : { color: '#4B5563' }}
+                onMouseEnter={(e) => e.target.style.color = '#6A4C2E'}
+                onMouseLeave={(e) => !isActive(link.path) && (e.target.style.color = '#4B5563')}
               >
                 {link.name}
               </Link>
             ))}
             <Link to="/login">
-              <Button className="bg-amber-800 hover:bg-amber-900 text-white px-6">
+              <Button className="text-white px-6" style={{ backgroundColor: '#6A4C2E' }}>
                 Login
               </Button>
             </Link>
@@ -66,15 +68,16 @@ const Navbar = () => {
                 key={link.path}
                 to={link.path}
                 className={`block text-lg font-medium py-2 transition-colors ${
-                  isActive(link.path) ? 'text-amber-800' : 'text-gray-700'
+                  isActive(link.path) ? '' : 'text-gray-700'
                 }`}
+                style={isActive(link.path) ? { color: '#6A4C2E' } : {}}
                 onClick={() => setIsOpen(false)}
               >
                 {link.name}
               </Link>
             ))}
             <Link to="/login" onClick={() => setIsOpen(false)}>
-              <Button className="w-full bg-amber-800 hover:bg-amber-900 text-white">
+              <Button className="w-full text-white" style={{ backgroundColor: '#6A4C2E' }}>
                 Login
               </Button>
             </Link>

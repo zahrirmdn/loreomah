@@ -1,17 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { menuCategories } from '../mockData';
 
 const MenuSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-4">
-          <p className="text-amber-600 uppercase tracking-wider font-semibold mb-2">
+          <p className="uppercase tracking-wider font-semibold mb-2" style={{ color: '#8B6F47' }}>
             from the best indonesian specialty coffee to heart-warming foods
           </p>
           <h2 className="text-5xl font-bold text-gray-400 uppercase mb-2">Our Menu</h2>
-          <div className="w-16 h-1 bg-amber-500 mx-auto"></div>
+          <div className="w-16 h-1 mx-auto" style={{ backgroundColor: '#6A4C2E' }}></div>
         </div>
 
         {/* Menu Categories */}
@@ -20,6 +23,7 @@ const MenuSection = () => {
             <div
               key={category.id}
               className="group cursor-pointer"
+              onClick={() => navigate(`/menu/${category.name.toLowerCase()}`)}
             >
               <div className="relative overflow-hidden rounded-lg shadow-lg mb-4 h-64">
                 <img

@@ -1,6 +1,5 @@
 import React from 'react';
 import { storyData } from '../mockData';
-import { Button } from './ui/button';
 
 const StorySection = () => {
   return (
@@ -18,15 +17,6 @@ const StorySection = () => {
                 {paragraph}
               </p>
             ))}
-
-            <div className="flex flex-wrap gap-4 pt-6">
-              <Button className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-6 text-lg">
-                AWAL MULA
-              </Button>
-              <Button className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-6 text-lg">
-                KAMPANYE
-              </Button>
-            </div>
           </div>
 
           {/* Image */}
@@ -37,8 +27,8 @@ const StorySection = () => {
                 alt="Cafe Loreomah Story"
                 className="w-full h-auto rounded-lg shadow-2xl"
               />
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-amber-500 rounded-full opacity-20 -z-10"></div>
-              <div className="absolute -top-6 -left-6 w-24 h-24 bg-amber-700 rounded-full opacity-20 -z-10"></div>
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full opacity-20 -z-10" style={{ backgroundColor: '#6A4C2E' }}></div>
+              <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full opacity-20 -z-10" style={{ backgroundColor: '#8B6F47' }}></div>
             </div>
           </div>
         </div>
