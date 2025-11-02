@@ -38,13 +38,7 @@ const AboutPage = () => {
             {aboutData.values.map((value, index) => {
               const Icon = valueIcons[value.title];
               return (
-                <div key={index} className="bg-white p-8 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow">
-                  <div className="bg-amber-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Icon className="text-white" size={36} />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">{value.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{value.description}</p>
-                </div>
+                <div key={index} className=\"bg-white p-8 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow\">\n                  <div className=\"w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4\" style={{ backgroundColor: '#6A4C2E' }}>\n                    <Icon className=\"text-white\" size={36} />\n                  </div>\n                  <h3 className=\"text-xl font-bold text-gray-800 mb-3\">{value.title}</h3>\n                  <p className=\"text-gray-600 text-sm leading-relaxed\">{value.description}</p>\n                </div>
               );
             })}
           </div>
