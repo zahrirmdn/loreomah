@@ -54,28 +54,40 @@ export const menuCategories = [
 
 export const menuItems = {
   food: [
-    { id: 1, name: "Nasi Goreng Loreomah", price: 35000, category: "food", image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400" },
-    { id: 2, name: "Mie Goreng Special", price: 32000, category: "food", image: "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400" },
-    { id: 3, name: "Sandwich Club", price: 28000, category: "food", image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400" },
-    { id: 4, name: "Pasta Carbonara", price: 38000, category: "food", image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400" }
+    { id: 1, name: "Nasi Goreng Loreomah", price: 35000, category: "food", description: "Lemon / Garlic / Beans" },
+    { id: 2, name: "Mie Goreng Loreomah", price: 32000, category: "food", description: "Bacon / Shrimp / Garlic" },
+    { id: 3, name: "Ayam Goreng Cabe Ijo", price: 28000, category: "food", description: "Lemon / Garlic / Beans" },
+    { id: 4, name: "Ayam Jawara Bakar", price: 38000, category: "food", description: "Bacon / Shrimp / Garlic" },
+    { id: 5, name: "Ayam Jawara Goreng", price: 30000, category: "food", description: "Lamb / Wine / Butter" },
+    { id: 6, name: "Nasi Solo", price: 25000, category: "food", description: "Lamb / Wine / Butter" },
+    { id: 7, name: "Asem-Asem Patin + Nasi Wukul", price: 36000, category: "food", description: "Oysters / Veggie / Ginger" },
+    { id: 8, name: "Bakso", price: 20000, category: "food", description: "Oysters / Veggie / Ginger" }
   ],
   snacks: [
-    { id: 5, name: "French Fries", price: 18000, category: "snacks", image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" },
-    { id: 6, name: "Onion Rings", price: 20000, category: "snacks", image: "https://images.unsplash.com/photo-1639024471283-03518883512d?w=400" },
-    { id: 7, name: "Chicken Wings", price: 25000, category: "snacks", image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400" },
-    { id: 8, name: "Nachos", price: 22000, category: "snacks", image: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=400" }
+    { id: 9, name: "French Fries", price: 18000, category: "snacks", description: "Kentang goreng crispy dengan saus pilihan" },
+    { id: 10, name: "Onion Rings", price: 20000, category: "snacks", description: "Bawang bombay goreng tepung renyah" },
+    { id: 11, name: "Chicken Wings", price: 25000, category: "snacks", description: "Sayap ayam dengan bumbu spesial" },
+    { id: 12, name: "Nachos", price: 22000, category: "snacks", description: "Tortilla chips dengan keju leleh dan salsa" },
+    { id: 13, name: "Spring Rolls", price: 19000, category: "snacks", description: "Lumpia sayuran segar" },
+    { id: 14, name: "Cheese Sticks", price: 21000, category: "snacks", description: "Stik keju mozzarella goreng" }
   ],
   coffee: [
-    { id: 9, name: "Espresso", price: 15000, category: "coffee", image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=400" },
-    { id: 10, name: "Cappuccino", price: 22000, category: "coffee", image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400" },
-    { id: 11, name: "Latte", price: 24000, category: "coffee", image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400" },
-    { id: 12, name: "Kopi Susu Loreomah", price: 20000, category: "coffee", image: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?w=400" }
+    { id: 15, name: "Espresso", price: 15000, category: "coffee", description: "Single shot kopi hitam pekat" },
+    { id: 16, name: "Americano", price: 18000, category: "coffee", description: "Espresso dengan air panas" },
+    { id: 17, name: "Cappuccino", price: 22000, category: "coffee", description: "Espresso dengan susu dan foam" },
+    { id: 18, name: "Latte", price: 24000, category: "coffee", description: "Espresso dengan steamed milk" },
+    { id: 19, name: "Kopi Susu Loreomah", price: 20000, category: "coffee", description: "Signature kopi susu dengan gula aren" },
+    { id: 20, name: "Vietnamese Coffee", price: 23000, category: "coffee", description: "Kopi Vietnam dengan susu kental manis" },
+    { id: 21, name: "Caramel Macchiato", price: 26000, category: "coffee", description: "Espresso dengan susu dan caramel" },
+    { id: 22, name: "Mocha", price: 25000, category: "coffee", description: "Espresso dengan cokelat dan susu" }
   ],
-  nonCoffee: [
-    { id: 13, name: "Teh Tarik", price: 15000, category: "nonCoffee", image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400" },
-    { id: 14, name: "Chocolate", price: 22000, category: "nonCoffee", image: "https://images.unsplash.com/photo-1542990253-a781e04c0082?w=400" },
-    { id: 15, name: "Matcha Latte", price: 25000, category: "nonCoffee", image: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400" },
-    { id: 16, name: "Fresh Juice", price: 18000, category: "nonCoffee", image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400" }
+  "non-coffee": [
+    { id: 23, name: "Teh Tarik", price: 15000, category: "non-coffee", description: "Teh susu tarik khas Malaysia" },
+    { id: 24, name: "Hot Chocolate", price: 22000, category: "non-coffee", description: "Cokelat panas dengan whipped cream" },
+    { id: 25, name: "Matcha Latte", price: 25000, category: "non-coffee", description: "Teh hijau Jepang dengan susu" },
+    { id: 26, name: "Fresh Orange Juice", price: 18000, category: "non-coffee", description: "Jus jeruk segar tanpa gula" },
+    { id: 27, name: "Lemon Tea", price: 16000, category: "non-coffee", description: "Teh lemon segar dingin" },
+    { id: 28, name: "Thai Tea", price: 20000, category: "non-coffee", description: "Teh Thailand dengan susu" }
   ]
 };
 
@@ -83,7 +95,7 @@ export const storyData = {
   title: "CERITA KAMI",
   paragraphs: [
     "Dimulai dari sebuah impian sederhana untuk menghadirkan kopi berkualitas dengan harga terjangkau, Cafe Loreomah hadir di tengah masyarakat pada tahun 2018. Berlokasi di jantung kota, kami percaya bahwa setiap cangkir kopi memiliki cerita dan kehangatan tersendiri.",
-    "Dengan menggunakan biji kopi pilihan dari berbagai perkebunan terbaik di Indonesia, kami berkomitmen untuk memberikan pengalaman minum kopi yang tak terlupakan. Setiap bariста kami dilatih dengan dedikasi tinggi untuk memastikan setiap sajian sempurna.",
+    "Dengan menggunakan biji kopi pilihan dari berbagai perkebunan terbaik di Indonesia, kami berkomitmen untuk memberikan pengalaman minum kopi yang tak terlupakan. Setiap barista kami dilatih dengan dedikasi tinggi untuk memastikan setiap sajian sempurna.",
     "Cafe Loreomah bukan hanya tempat minum kopi, tetapi juga ruang untuk berkumpul, berbagi cerita, dan menciptakan kenangan indah bersama orang-orang terkasih. Kami bangga menjadi bagian dari perjalanan kopi Indonesia."
   ],
   image: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=600"
@@ -109,6 +121,7 @@ export const contactData = {
   facebook: "Cafe Loreomah Official",
   email: "hello@cafeloreomah.com",
   tiktok: "cafeloreomah",
+  youtube: "Cafe Loreomah",
   phone: "+62 812 3456 7890",
   address: "Jl. Raya Contoh No. 123, Surabaya, Jawa Timur 60111",
   maps: "https://maps.google.com"
@@ -126,3 +139,6 @@ export const aboutData = {
     { title: "Inovasi", description: "Terus berinovasi dalam menu dan pelayanan" }
   ]
 };
+
+// Google Drive link for full menu
+export const menuDriveLink = "https://drive.google.com/drive/folders/your-folder-id";
