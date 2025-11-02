@@ -26,16 +26,7 @@ const AboutPage = () => {
       {/* Mission & Vision */}
       <div className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="bg-amber-50 p-8 rounded-lg shadow-md">
-              <h2 className="text-3xl font-bold text-amber-900 mb-4">Misi Kami</h2>
-              <p className="text-gray-700 leading-relaxed">{aboutData.mission}</p>
-            </div>
-            <div className="bg-amber-50 p-8 rounded-lg shadow-md">
-              <h2 className="text-3xl font-bold text-amber-900 mb-4">Visi Kami</h2>
-              <p className="text-gray-700 leading-relaxed">{aboutData.vision}</p>
-            </div>
-          </div>
+          <div className=\"grid grid-cols-1 md:grid-cols-2 gap-12\">\n            <div className=\"bg-amber-50 p-8 rounded-lg shadow-md\">\n              <h2 className=\"text-3xl font-bold mb-4\" style={{ color: '#6A4C2E' }}>Misi Kami</h2>\n              <p className=\"text-gray-700 leading-relaxed\">{aboutData.mission}</p>\n            </div>\n            <div className=\"bg-amber-50 p-8 rounded-lg shadow-md\">\n              <h2 className=\"text-3xl font-bold mb-4\" style={{ color: '#6A4C2E' }}>Visi Kami</h2>\n              <p className=\"text-gray-700 leading-relaxed\">{aboutData.vision}</p>\n            </div>\n          </div>
         </div>
       </div>
 
