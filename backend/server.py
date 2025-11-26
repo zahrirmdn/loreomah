@@ -10,6 +10,10 @@ from pathlib import Path
 import uuid
 import os
 import logging
+from routers import slider_router 
+from fastapi.staticfiles import StaticFiles
+from routers import menu_category_router
+from routers import gallery_router
 
 # === Load environment variables ===
 ROOT_DIR = Path(__file__).parent
@@ -30,6 +34,7 @@ if not mongo_url or not db_name:
 
 client = AsyncIOMotorClient(mongo_url)
 db = client[db_name]
+app.state.db = db
 
 # === Model ===
 class StatusCheck(BaseModel):
@@ -85,7 +90,7 @@ app.include_router(api_router)
 # === Import & include auth routes (jika ada) ===
 try:
     from auth import router as auth_router
-    app.include_router(auth_router, prefix="/auth", tags=["Auth"])
+    app.include_router(auth_router)  # auth.py sudah punya prefix /auth
     logging.info("🔐 Auth routes loaded successfully.")
 except ImportError:
     logging.warning("⚠️ Auth module not found, skipping authentication routes.")
@@ -104,3 +109,53 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
+
+
+# === Include Routers ===
+app.include_router(api_router)
+
+try:
+    from auth import router as auth_router
+    app.include_router(auth_router)
+except ImportError:
+    logging.warning("⚠️ Auth module not found, skipping authentication routes.")
+
+# === Include Slider Router ===
+from routers import slider_router
+app.include_router(slider_router.router)
+
+# === Static Files ===
+app.mount("/uploads", StaticFiles(directory="backend/uploads"), name="uploads")
+
+
+# === Menu Category ===
+app.include_router(menu_category_router.router)
+
+# === Gallery ===
+app.include_router(gallery_router.router)
+
+# === Reservations ===
+from routers import reservation_router
+app.include_router(reservation_router.router)
+
+# === Users ===
+from routers import user_router
+app.include_router(user_router.router)
+
+# === Menu Items ===
+from routers import menu_item_router
+app.include_router(menu_item_router.router)
+
+# === Messages ===
+from routers import message_router
+app.include_router(message_router.router)
+
+# === Settings ===
+from routers import settings_router
+app.include_router(settings_router.router)
+
+# === Optional application factory for uvicorn 'server:start' ===
+def start():
+    """Return FastAPI app instance (allows 'uvicorn server:start')."""
+    return app
+

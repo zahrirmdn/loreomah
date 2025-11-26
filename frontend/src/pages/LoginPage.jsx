@@ -1,284 +1,403 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, User } from 'lucide-react';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { useToast } from '../hooks/use-toast';
+import React, { useState } from "react";
+import LogoImg from '../assets/logo_loreomah.png';
+import { useNavigate } from "react-router-dom";
+import { Mail, Lock, Eye, EyeOff, Phone } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/ui/tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../components/ui/alert-dialog";
+import { useToast } from "../hooks/use-toast";
+import API from "../api/api";
+import { startSession } from "../lib/session";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [signupData, setSignupData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [loading, setLoading] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [showLoadingDialog, setShowLoadingDialog] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState("");
+  const [activeTab, setActiveTab] = useState("login");
 
-  const handleLogin = (e) => {
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [signupData, setSignupData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone_number: "",
+  });
+
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // === LOGIN ===
+  const handleLogin = async (e) => {
     e.preventDefault();
-    
-    // Mock admin login
-    if (loginData.email === 'admin@cafeloreomah.com' && loginData.password === 'admin123') {
-      toast({
-        title: "Login Berhasil!",
-        description: "Selamat datang Admin!"
+    setLoading(true);
+
+    try {
+      const form = new URLSearchParams();
+      form.append("username", loginData.email);
+      form.append("password", loginData.password);
+
+      let res = await API.post("/auth/user/login", form, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
-      navigate('/admin/dashboard');
-    } else {
+
+      localStorage.setItem("token", res.data.access_token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
       toast({
         title: "Login berhasil!",
-        description: "Selamat datang kembali!",
+        description: `Selamat datang, ${res.data.user.email}!`,
       });
-      navigate('/booking');
+
+      // Mulai session berdasarkan role
+      startSession(res.data.user.role);
+      if (res.data.user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/", { state: { showReservationPromo: true } });
+      }
+
+    } catch (err) {
+      if (err.response?.status === 400 || err.response?.status === 403) {
+        try {
+          const formAdmin = new URLSearchParams();
+          formAdmin.append("username", loginData.email);
+          formAdmin.append("password", loginData.password);
+
+          const resAdmin = await API.post("/auth/admin/login", formAdmin, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          });
+
+          localStorage.setItem("token", resAdmin.data.access_token);
+          localStorage.setItem("user", JSON.stringify(resAdmin.data.user));
+
+          toast({
+            title: "Login berhasil!",
+            description: `Selamat datang kembali, ${resAdmin.data.user.email}!`,
+          });
+
+          startSession(resAdmin.data.user.role);
+          navigate("/admin/dashboard");
+          return;
+
+        } catch (adminErr) {
+          toast({
+            title: "Login gagal!",
+            description: adminErr.response?.data?.detail || "Email atau password salah.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        toast({
+          title: "Login gagal!",
+          description: "Periksa kembali email dan password kamu.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSignup = (e) => {
+  // === REGISTER ===
+  const handleSignup = async (e) => {
     e.preventDefault();
-    
+
     if (signupData.password !== signupData.confirmPassword) {
       toast({
         title: "Error",
-        description: "Password tidak cocok!",
-        variant: "destructive"
+        description: "Password dan konfirmasi password tidak cocok!",
+        variant: "destructive",
       });
       return;
     }
 
-    toast({
-      title: "Registrasi Berhasil!",
-      description: "Akun Anda telah dibuat. Silakan login."
-    });
-    
-    // Reset form
-    setSignupData({ name: '', email: '', password: '', confirmPassword: '' });
-  };
+    setLoading(true);
+    setShowLoadingDialog(true);
+    try {
+      const res = await API.post("/auth/user/register", {
+        email: signupData.email,
+        password: signupData.password,
+        phone_number: signupData.phone_number,
+      });
 
-  const handleGoogleLogin = () => {
-    toast({
-      title: "Google Login",
-      description: "Fitur ini akan aktif setelah backend terintegrasi"
-    });
+      // Wait a bit to show the loading animation
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      toast({
+        title: "Pendaftaran Berhasil!",
+        description: "Kode OTP telah dikirim ke email Anda. Silakan cek email.",
+      });
+
+      // Navigate to OTP verification page
+      navigate('/verify-otp', { state: { email: signupData.email } });
+    } catch (err) {
+      setShowLoadingDialog(false);
+      toast({
+        title: "Registrasi gagal!",
+        description: err.response?.data?.detail || "Terjadi kesalahan saat registrasi.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4" style={{ background: 'linear-gradient(135deg, #6A4C2E 0%, #8B6F47 100%)' }}>
+    <div
+      className="min-h-screen flex items-center justify-center py-8 sm:py-10 md:py-12 px-4"
+      style={{
+        background: "linear-gradient(135deg, #6A4C2E 0%, #8B6F47 100%)",
+      }}
+    >
       <div className="max-w-md w-full">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4">
-            <span className="text-3xl font-bold" style={{ color: '#6A4C2E' }}>CL</span>
+        {/* HEADER */}
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full mb-3 sm:mb-4 overflow-hidden">
+            <img src={LogoImg} alt="Logo" className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
           </div>
-          <h1 className="text-4xl font-bold text-white">Cafe Loreomah</h1>
-          <p className="text-amber-200 mt-2">Selamat datang kembali!</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-white">Cafe Loreomah</h1>
+          <p className="text-amber-200 mt-2 text-sm sm:text-base">Selamat datang kembali!</p>
         </div>
 
-        {/* Tabs */}
-        <Tabs defaultValue="login" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+        {/* TAB LOGIN & SIGNUP */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6">
+            <TabsTrigger value="login" className="text-sm sm:text-base">Login</TabsTrigger>
+            <TabsTrigger value="signup" className="text-sm sm:text-base">Sign Up</TabsTrigger>
           </TabsList>
 
-          {/* Login Tab */}
+          {/* LOGIN TAB */}
           <TabsContent value="login">
-            <div className="bg-white rounded-lg shadow-2xl p-8">
-              <form onSubmit={handleLogin} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                    <Input
-                      type="email"
-                      value={loginData.email}
-                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                      placeholder="email@example.com"
-                      className="pl-10"
-                      required
-                    />
-                  </div>
+            <div className="bg-white rounded-lg shadow-2xl p-6 sm:p-8">
+              <form onSubmit={handleLogin} className="space-y-4 sm:space-y-6">
+                {/* Email */}
+                <div className="relative">
+                  <Mail
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    type="email"
+                    value={loginData.email}
+                    onChange={(e) =>
+                      setLoginData({ ...loginData, email: e.target.value })
+                    }
+                    placeholder="Enter Email"
+                    className="pl-10 text-sm sm:text-base"
+                    required
+                  />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                    <Input
-                      type="password"
-                      value={loginData.password}
-                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                      placeholder="••••••••"
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <Button type="submit" className="w-full text-white py-6" style={{ backgroundColor: '#6A4C2E' }}>
-                  Login
-                </Button>
-
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">Atau login dengan</span>
-                  </div>
+                {/* Password */}
+                <div className="relative">
+                  <Lock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    type={showLoginPassword ? "text" : "password"}
+                    value={loginData.password}
+                    onChange={(e) =>
+                      setLoginData({ ...loginData, password: e.target.value })
+                    }
+                    placeholder="Enter Password"
+                    className="pl-10 pr-10 text-sm sm:text-base"
+                    required
+                  />
+                  <span
+                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
+                    onClick={() => setShowLoginPassword(!showLoginPassword)}
+                  >
+                    {showLoginPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </span>
                 </div>
 
                 <Button
-                  type="button"
-                  onClick={handleGoogleLogin}
-                  variant="outline"
-                  className="w-full py-6"
+                  type="submit"
+                  className="w-full text-white py-5 sm:py-6 text-base sm:text-lg"
+                  style={{ backgroundColor: "#6A4C2E" }}
+                  disabled={loading}
                 >
-                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                    <path
-                      fill="#4285F4"
-                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                    />
-                    <path
-                      fill="#34A853"
-                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    />
-                    <path
-                      fill="#FBBC05"
-                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                    />
-                    <path
-                      fill="#EA4335"
-                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                    />
-                  </svg>
-                  Google
+                  {loading ? "Memproses..." : "Login"}
                 </Button>
-
-                <p className="text-center text-sm text-gray-600 mt-4">
-                  Demo Admin: admin@cafeloreomah.com / admin123
-                </p>
               </form>
             </div>
           </TabsContent>
 
-          {/* Signup Tab */}
+          {/* SIGNUP TAB */}
           <TabsContent value="signup">
-            <div className="bg-white rounded-lg shadow-2xl p-8">
-              <form onSubmit={handleSignup} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nama Lengkap
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                    <Input
-                      type="text"
-                      value={signupData.name}
-                      onChange={(e) => setSignupData({ ...signupData, name: e.target.value })}
-                      placeholder="Nama Anda"
-                      className="pl-10"
-                      required
-                    />
-                  </div>
+            <div className="bg-white rounded-lg shadow-2xl p-6 sm:p-8">
+              <form onSubmit={handleSignup} className="space-y-4 sm:space-y-6">
+                {/* Email */}
+                <div className="relative">
+                  <Mail
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    type="email"
+                    value={signupData.email}
+                    onChange={(e) =>
+                      setSignupData({ ...signupData, email: e.target.value })
+                    }
+                    placeholder="Enter Email"
+                    className="pl-10 text-sm sm:text-base"
+                    required
+                  />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                    <Input
-                      type="email"
-                      value={signupData.email}
-                      onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                      placeholder="email@example.com"
-                      className="pl-10"
-                      required
-                    />
-                  </div>
+                {/* Phone Number */}
+                <div className="relative">
+                  <Phone
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    type="tel"
+                    value={signupData.phone_number}
+                    onChange={(e) =>
+                      setSignupData({ ...signupData, phone_number: e.target.value })
+                    }
+                    placeholder="Nomor Telepon"
+                    className="pl-10 text-sm sm:text-base"
+                    required
+                  />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                    <Input
-                      type="password"
-                      value={signupData.password}
-                      onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                      placeholder="••••••••"
-                      className="pl-10"
-                      required
-                    />
-                  </div>
+                {/* Password */}
+                <div className="relative">
+                  <Lock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    type={showSignupPassword ? "text" : "password"}
+                    value={signupData.password}
+                    onChange={(e) =>
+                      setSignupData({ ...signupData, password: e.target.value })
+                    }
+                    placeholder="Enter Password"
+                    className="pl-10 pr-10 text-sm sm:text-base"
+                    required
+                  />
+                  <span
+                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
+                    onClick={() => setShowSignupPassword(!showSignupPassword)}
+                  >
+                    {showSignupPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </span>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Konfirmasi Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                    <Input
-                      type="password"
-                      value={signupData.confirmPassword}
-                      onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
-                      placeholder="••••••••"
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <Button type="submit" className="w-full text-white py-6" style={{ backgroundColor: '#6A4C2E' }}>
-                  Daftar
-                </Button>
-
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">Atau daftar dengan</span>
-                  </div>
+                {/* Confirm Password */}
+                <div className="relative">
+                  <Lock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={signupData.confirmPassword}
+                    onChange={(e) =>
+                      setSignupData({
+                        ...signupData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
+                    placeholder="Confirm Password"
+                    className="pl-10 pr-10 text-sm sm:text-base"
+                    required
+                  />
+                  <span
+                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </span>
                 </div>
 
                 <Button
-                  type="button"
-                  onClick={handleGoogleLogin}
-                  variant="outline"
-                  className="w-full py-6"
+                  type="submit"
+                  className="w-full text-white py-5 sm:py-6 text-base sm:text-lg"
+                  style={{ backgroundColor: "#6A4C2E" }}
+                  disabled={loading}
                 >
-                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                    <path
-                      fill="#4285F4"
-                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                    />
-                    <path
-                      fill="#34A853"
-                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    />
-                    <path
-                      fill="#FBBC05"
-                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                    />
-                    <path
-                      fill="#EA4335"
-                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                    />
-                  </svg>
-                  Google
+                  {loading ? "Mendaftarkan..." : "Daftar"}
                 </Button>
               </form>
             </div>
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Success Dialog */}
+      <AlertDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl text-center">
+              🎉 Registrasi Berhasil!
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-center text-base pt-4">
+              Akun <span className="font-semibold text-amber-900">{registeredEmail}</span> berhasil dibuat.
+              <br />
+              <br />
+              Silakan login untuk melanjutkan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction
+              className="w-full text-white"
+              style={{ backgroundColor: "#6A4C2E" }}
+              onClick={() => setShowSuccessDialog(false)}
+            >
+              Oke, Lanjut Login
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Loading Dialog - Registration */}
+      <AlertDialog open={showLoadingDialog} onOpenChange={setShowLoadingDialog}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl text-center">
+              📧 Mengirim Kode OTP
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-center text-base pt-6 pb-4">
+              <div className="flex flex-col items-center space-y-4">
+                <div className="w-16 h-16 border-4 border-amber-900 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-gray-700">
+                  Sedang mengirim kode verifikasi ke email Anda...
+                  <br />
+                  <span className="font-semibold text-amber-900">{signupData.email}</span>
+                </p>
+                <p className="text-sm text-gray-500">Mohon tunggu sebentar</p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

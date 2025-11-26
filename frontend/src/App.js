@@ -7,10 +7,16 @@ import LandingPage from "./pages/LandingPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
 import LoginPage from "./pages/LoginPage";
+import VerifyOTPPage from "./pages/VerifyOTPPage";
 import BookingPage from "./pages/BookingPage";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import EditMenuDetail from "./pages/admin/EditMenuDetail";
+import EditSlider from "./pages/admin/EditSlider";
+import EditGallery from "./pages/admin/EditGallery";
 import MenuDetailPage from "./pages/MenuDetailPage";
+import ProfilePage from "./pages/ProfilePage";
 import { Toaster } from "./components/ui/toaster";
+import SessionWatcher from "./components/SessionWatcher";
 
 function App() {
   return (
@@ -29,6 +35,7 @@ function App() {
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/booking" element={<BookingPage />} />
                   <Route path="/menu/:category" element={<MenuDetailPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
                 </Routes>
                 <Footer />
               </>
@@ -37,10 +44,15 @@ function App() {
 
           {/* Auth Routes without Navbar & Footer */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/verify-otp" element={<VerifyOTPPage />} />
 
           {/* Admin Routes without Navbar & Footer */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/edit-menu/:name" element={<EditMenuDetail />} />
+          <Route path="/admin/edit-slider/:id" element={<EditSlider />} />
+          <Route path="/admin/edit-gallery/:id" element={<EditGallery />} />
         </Routes>
+        <SessionWatcher />
         <Toaster />
       </BrowserRouter>
     </div>

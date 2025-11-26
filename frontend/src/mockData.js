@@ -1,25 +1,6 @@
 // Mock Data untuk Cafe Loreomah
-
-export const sliderData = [
-  {
-    id: 1,
-    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200",
-    title: "Selamat Datang di Cafe Loreomah",
-    description: "Nikmati kopi specialty terbaik Indonesia dengan suasana hangat dan nyaman"
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=1200",
-    title: "Kopi Nusantara Terbaik",
-    description: "Dari perkebunan terbaik Indonesia, disajikan dengan penuh cinta"
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=1200",
-    title: "Tempat Berkumpul Favorit",
-    description: "Ruang hangat untuk bertemu teman, keluarga, dan momen spesial Anda"
-  }
-];
+// Most data has been migrated to database via API
+// Only keeping fallback data for MenuDetailPage
 
 export const menuCategories = [
   {
@@ -91,54 +72,13 @@ export const menuItems = {
   ]
 };
 
-export const storyData = {
-  title: "CERITA KAMI",
-  paragraphs: [
-    "Dimulai dari sebuah impian sederhana untuk menghadirkan kopi berkualitas dengan harga terjangkau, Cafe Loreomah hadir di tengah masyarakat pada tahun 2018. Berlokasi di jantung kota, kami percaya bahwa setiap cangkir kopi memiliki cerita dan kehangatan tersendiri.",
-    "Dengan menggunakan biji kopi pilihan dari berbagai perkebunan terbaik di Indonesia, kami berkomitmen untuk memberikan pengalaman minum kopi yang tak terlupakan. Setiap barista kami dilatih dengan dedikasi tinggi untuk memastikan setiap sajian sempurna.",
-    "Cafe Loreomah bukan hanya tempat minum kopi, tetapi juga ruang untuk berkumpul, berbagi cerita, dan menciptakan kenangan indah bersama orang-orang terkasih. Kami bangga menjadi bagian dari perjalanan kopi Indonesia."
-  ],
-  image: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=600"
-};
 
-export const galleryImages = [
-  { id: 1, image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400", alt: "Cafe Interior" },
-  { id: 2, image: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=400", alt: "Coffee Art" },
-  { id: 3, image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400", alt: "Barista" },
-  { id: 4, image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400", alt: "Coffee Beans" },
-  { id: 5, image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400", alt: "Latte Art" },
-  { id: 6, image: "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=400", alt: "Coffee Shop" },
-  { id: 7, image: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=400", alt: "Coffee Time" },
-  { id: 8, image: "https://images.unsplash.com/photo-1493857671505-72967e2e2760?w=400", alt: "Espresso Machine" },
-  { id: 9, image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400", alt: "Coffee Cup" },
-  { id: 10, image: "https://images.unsplash.com/photo-1497515114629-f71d768fd07c?w=400", alt: "Cafe Ambience" },
-  { id: 11, image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400", alt: "Coffee Pouring" },
-  { id: 12, image: "https://images.unsplash.com/photo-1506619216599-9d16d0903dfd?w=400", alt: "Coffee Moment" }
-];
 
-export const contactData = {
-  instagram: "@cafeloreomah",
-  facebook: "Cafe Loreomah Official",
-  email: "hello@cafeloreomah.com",
-  tiktok: "cafeloreomah",
-  youtube: "Cafe Loreomah",
-  phone: "+62 812 3456 7890",
-  address: "Jl. Raya Contoh No. 123, Surabaya, Jawa Timur 60111",
-  maps: "https://maps.google.com"
-};
 
-export const aboutData = {
-  title: "Tentang Kami",
-  subtitle: "Cafe Loreomah - More Than Just Coffee",
-  mission: "Misi kami adalah menghadirkan pengalaman kopi terbaik dengan menggunakan biji kopi pilihan dari perkebunan lokal Indonesia, disajikan dalam suasana yang hangat dan ramah.",
-  vision: "Menjadi coffee shop pilihan utama yang tidak hanya menyajikan kopi berkualitas, tetapi juga menjadi rumah kedua bagi setiap pengunjung.",
-  values: [
-    { title: "Kualitas", description: "Hanya menggunakan biji kopi specialty terbaik dari Indonesia" },
-    { title: "Kehangatan", description: "Menciptakan suasana yang nyaman dan ramah untuk semua" },
-    { title: "Komunitas", description: "Membangun hubungan yang kuat dengan pelanggan dan masyarakat" },
-    { title: "Inovasi", description: "Terus berinovasi dalam menu dan pelayanan" }
-  ]
-};
+
+
+
+
 
 // Google Drive link for full menu
 export const menuDriveLink = "https://drive.google.com/drive/folders/your-folder-id";
