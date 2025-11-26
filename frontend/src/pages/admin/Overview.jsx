@@ -27,7 +27,6 @@ const Overview = () => {
 
   useEffect(() => {
     fetchUsers(1, "");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSearch = (e) => {
