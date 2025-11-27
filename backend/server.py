@@ -46,6 +46,11 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+# === Health Check (Railway needs root endpoint) ===
+@app.get("/")
+async def health_check():
+    return {"status": "ok", "message": "LoreOmah API is running"}
+
 # === Routes ===
 @api_router.get("/")
 async def root():
