@@ -164,3 +164,11 @@ def start():
     """Return FastAPI app instance (allows 'uvicorn server:start')."""
     return app
 
+# === Run with dynamic PORT for Railway ===
+if __name__ == "__main__":
+    import uvicorn
+    # Railway sets PORT environment variable
+    port = int(os.environ.get("PORT", 8000))
+    print(f"🚀 Starting server on port {port}")
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
